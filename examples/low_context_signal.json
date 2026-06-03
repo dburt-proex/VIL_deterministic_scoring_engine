@@ -1,0 +1,9 @@
+{
+  "signal_id": "sig_low_context_001",
+  "source": "email",
+  "signal_type": "lead",
+  "content": "Need AI help soon.",
+  "metadata": {},
+  "source_pointers": [],
+  "risk_flags": []
+}
