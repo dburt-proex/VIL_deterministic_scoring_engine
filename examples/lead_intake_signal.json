@@ -1,0 +1,19 @@
+{
+  "signal_id": "sig_lead_001",
+  "source": "website_form",
+  "signal_type": "lead",
+  "content": "A local construction contractor wants help reducing manual admin time, improving estimate follow-up, and routing new leads faster before weekend office work piles up.",
+  "metadata": {
+    "industry": "construction",
+    "company_size": "small_business",
+    "location": "Rochester, MN",
+    "workflow": "lead intake and follow-up"
+  },
+  "source_pointers": [
+    {
+      "type": "form",
+      "value": "website intake form"
+    }
+  ],
+  "risk_flags": []
+}
