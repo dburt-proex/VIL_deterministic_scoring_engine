@@ -1,0 +1,8 @@
+version: vil_policy_v1
+score_min: 0
+score_max: 10
+weights_file: configs/scoring_weights.yaml
+thresholds_file: configs/route_thresholds.yaml
+audit_input_hash: true
+audit_source_pointers: true
+audit_score_breakdown: true
