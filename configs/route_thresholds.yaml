@@ -1,0 +1,12 @@
+pass: 8.0
+review: 5.0
+clarify: 3.0
+archive: 0.0
+halt_flags:
+  - secrets
+  - prod_data_destruction
+  - policy_violation
+  - unsafe_action
+  - irreversible_external_action
+  - regulated_decision
+  - private_data_exposure
