@@ -1,0 +1,18 @@
+{
+  "signal_id": "sig_content_001",
+  "source": "research_notes",
+  "signal_type": "content",
+  "content": "A recurring AI governance topic has strong audience fit, proof potential, and LinkedIn distribution value for a technical post about signal quality and deterministic routing.",
+  "metadata": {
+    "channel": "linkedin",
+    "topic": "AI governance",
+    "asset_type": "technical post"
+  },
+  "source_pointers": [
+    {
+      "type": "note",
+      "value": "internal research notes"
+    }
+  ],
+  "risk_flags": []
+}
