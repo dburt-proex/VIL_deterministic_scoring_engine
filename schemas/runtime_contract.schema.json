@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VIL Runtime Contract",
+  "type": "object",
+  "required": ["input", "output", "invariant"],
+  "properties": {
+    "input": {"$ref": "signal_input.schema.json"},
+    "output": {"$ref": "vil_score_object.schema.json"},
+    "invariant": {
+      "type": "string",
+      "const": "final_score_cannot_exceed_verifiability_score"
+    }
+  }
+}
