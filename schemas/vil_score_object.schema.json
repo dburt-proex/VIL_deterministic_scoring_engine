@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "VIL Score Object",
+  "type": "object",
+  "required": ["signal_id", "weighted_signal_score", "verifiability_score", "vil_score", "route", "reason", "criteria_scores", "audit"],
+  "properties": {
+    "signal_id": {"type": "string"},
+    "weighted_signal_score": {"type": "number", "minimum": 0, "maximum": 10},
+    "verifiability_score": {"type": "number", "minimum": 0, "maximum": 10},
+    "vil_score": {"type": "number", "minimum": 0, "maximum": 10},
+    "route": {"type": "string", "enum": ["PASS", "REVIEW", "CLARIFY", "ARCHIVE", "HALT"]},
+    "reason": {"type": "string"},
+    "criteria_scores": {"type": "object"},
+    "risk_flags": {"type": "array", "items": {"type": "string"}},
+    "audit": {"type": "object"}
+  }
+}
