@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIL — Verified Intelligence Layer</title>
+    <meta name="description" content="Deterministic signal scoring, verification, routing, and audit for AI-assisted operations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --bg-tertiary: #1a1a26;
+            --bg-card: #14141e;
+            --border: #2a2a3a;
+            --border-accent: #3d3d55;
+            --text-primary: #f0f0f5;
+            --text-secondary: #a0a0b8;
+            --text-muted: #6a6a82;
+            --accent: #7c5cfc;
+            --accent-dim: #5a3fd4;
+            --accent-glow: rgba(124, 92, 252, 0.15);
+            --pass: #34d399;
+            --review: #fbbf24;
+            --clarify: #60a5fa;
+            --archive: #6b7280;
+            --halt: #f87171;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .nav-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        .nav-brand span { color: var(--accent); }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            transition: color 0.2s;
+        }
+
+        .nav-links a:hover { color: var(--text-primary); }
+
+        /* Hero */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 6rem 2rem 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, var(--accent-glow) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border: 1px solid var(--border-accent);
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 5.5rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero h1 .accent { color: var(--accent); }
+
+        .hero-sub {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            line-height: 1.7;
+        }
+
+        .hero-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.9rem 2rem;
+            background: var(--accent);
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .hero-cta:hover {
+            background: var(--accent-dim);
+            transform: translateY(-1px);
+            box-shadow: 0 8px 30px rgba(124, 92, 252, 0.3);
+        }
+
+        /* Sections */
+        section {
+            padding: 6rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+        }
+
+        .section-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            line-height: 1.7;
+            margin-bottom: 3rem;
+        }
+
+        /* Invariant Block */
+        .invariant {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 3rem;
+            text-align: center;
+            margin: 4rem 0;
+        }
+
+        .invariant-formula {
+            font-family: var(--font-mono);
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 500;
+            color: var(--text-primary);
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .invariant-note {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        /* Flow Diagram */
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 3rem 0;
+        }
+
+        .flow-step {
+            padding: 0.7rem 1.2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .flow-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* Route Cards */
+        .routes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .route-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+
+        .route-card:hover {
+            border-color: var(--border-accent);
+            transform: translateY(-2px);
+        }
+
+        .route-card .route-name {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .route-card .route-desc {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .route-card .route-score {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.75rem;
+        }
+
+        .route-pass .route-name { color: var(--pass); }
+        .route-review .route-name { color: var(--review); }
+        .route-clarify .route-name { color: var(--clarify); }
+        .route-archive .route-name { color: var(--archive); }
+        .route-halt .route-name { color: var(--halt); }
+
+        /* Criteria Table */
+        .criteria-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
+
+        .criteria-table th,
+        .criteria-table td {
+            padding: 1rem 1.5rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .criteria-table th {
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .criteria-table td {
+            font-size: 0.9rem;
+        }
+
+        .criteria-table td:first-child {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .criteria-table td:last-child {
+            font-family: var(--font-mono);
+            color: var(--accent);
+            text-align: right;
+        }
+
+        .criteria-table tr:hover td {
+            background: var(--bg-secondary);
+        }
+
+        /* Use Cases */
+        .use-cases {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .use-case {
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: border-color 0.2s;
+        }
+
+        .use-case:hover { border-color: var(--border-accent); }
+
+        .use-case h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .use-case p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            overflow-x: auto;
+            margin: 2rem 0;
+        }
+
+        .code-block pre {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+        }
+
+        .code-block .comment { color: var(--text-muted); }
+        .code-block .keyword { color: var(--accent); }
+        .code-block .string { color: var(--pass); }
+        .code-block .number { color: var(--review); }
+
+        /* Architecture */
+        .arch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .arch-item {
+            padding: 2rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .arch-item h3 {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--accent);
+        }
+
+        .arch-item p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 8rem 2rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .cta-section h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .cta-section p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 2rem;
+            border-top: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .footer-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-brand {
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.08em;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover { color: var(--text-secondary); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .footer-inner { flex-direction: column; gap: 1.5rem; }
+            .flow { flex-direction: column; }
+            .flow-arrow { transform: rotate(90deg); }
+            section { padding: 4rem 1.5rem; }
+        }
+
+        /* Divider */
+        .divider {
+            width: 100%;
+            height: 1px;
+            background: var(--border);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-inner">
+            <a href="#" class="nav-brand"><span>VIL</span></a>
+            <ul class="nav-links">
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#routing">Routing</a></li>
+                <li><a href="#scoring">Scoring</a></li>
+                <li><a href="#use-cases">Use Cases</a></li>
+                <li><a href="https://github.com/dburt-proex/VIL_deterministic_scoring_engine">GitHub</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">Deterministic Signal Intelligence</div>
+            <h1>Verified<br><span class="accent">Intelligence Layer</span></h1>
+            <p class="hero-sub">
+                Deterministic scoring, verification, and routing for AI-assisted operations. 
+                A signal cannot outrank its evidence.
+            </p>
+            <a href="https://github.com/dburt-proex/VIL_deterministic_scoring_engine" class="hero-cta">
+                View on GitHub →
+            </a>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Core Invariant -->
+    <section id="how-it-works">
+        <span class="section-label">Core Principle</span>
+        <h2 class="section-title">The Scoring Invariant</h2>
+        <p class="section-desc">
+            Every signal is evaluated against two dimensions: operational value and evidence quality. 
+            The final score is always constrained by verifiability.
+        </p>
+
+        <div class="invariant">
+            <div class="invariant-formula">
+                vil_score = min(weighted_signal_score, verifiability_score)
+            </div>
+            <p class="invariant-note">A signal cannot outrank its evidence.</p>
+        </div>
+
+        <!-- Flow -->
+        <div class="flow">
+            <div class="flow-step">Raw Signal</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Normalize</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Score Value</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Score Verifiability</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Risk Override</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Route</div>
+            <span class="flow-arrow">→</span>
+            <div class="flow-step">Audit</div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Routing -->
+    <section id="routing">
+        <span class="section-label">Signal Routing</span>
+        <h2 class="section-title">Five Deterministic Routes</h2>
+        <p class="section-desc">
+            Every evaluated signal exits VIL through exactly one route. No ambiguity, no guesswork.
+        </p>
+
+        <div class="routes-grid">
+            <div class="route-card route-pass">
+                <div class="route-name">PASS</div>
+                <div class="route-desc">High-confidence signal. Ready for downstream action.</div>
+                <div class="route-score">8.0 – 10.0</div>
+            </div>
+            <div class="route-card route-review">
+                <div class="route-name">REVIEW</div>
+                <div class="route-desc">Valuable or plausible signal requiring human judgment.</div>
+                <div class="route-score">5.0 – 7.99</div>
+            </div>
+            <div class="route-card route-clarify">
+                <div class="route-name">CLARIFY</div>
+                <div class="route-desc">Potentially useful, but missing evidence or specificity.</div>
+                <div class="route-score">3.0 – 4.99</div>
+            </div>
+            <div class="route-card route-archive">
+                <div class="route-name">ARCHIVE</div>
+                <div class="route-desc">Low-value noise. Store or discard.</div>
+                <div class="route-score">0.0 – 2.99</div>
+            </div>
+            <div class="route-card route-halt">
+                <div class="route-name">HALT</div>
+                <div class="route-desc">Unsafe, non-compliant, destructive, or outside scope.</div>
+                <div class="route-score">Critical risk flag</div>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Scoring -->
+    <section id="scoring">
+        <span class="section-label">Scoring Engine</span>
+        <h2 class="section-title">Weighted Criteria</h2>
+        <p class="section-desc">
+            Eight deterministic criteria estimate operational and commercial value. 
+            Weights are configurable per deployment.
+        </p>
+
+        <table class="criteria-table">
+            <thead>
+                <tr>
+                    <th>Criterion</th>
+                    <th style="text-align: right;">Weight</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>strategic_alignment</td><td>0.20</td></tr>
+                <tr><td>revenue_potential</td><td>0.20</td></tr>
+                <tr><td>compounding_leverage</td><td>0.15</td></tr>
+                <tr><td>automation_potential</td><td>0.15</td></tr>
+                <tr><td>cognitive_load_reduction</td><td>0.10</td></tr>
+                <tr><td>urgency</td><td>0.10</td></tr>
+                <tr><td>source_quality</td><td>0.05</td></tr>
+                <tr><td>completeness</td><td>0.05</td></tr>
+            </tbody>
+        </table>
+
+        <div class="code-block">
+            <pre><span class="comment"># Example API request</span>
+curl -X POST http://localhost:8000/score \
+  -H <span class="string">"Content-Type: application/json"</span> \
+  -d <span class="string">'{
+    "signal_type": "lead_intake",
+    "source": "website_form",
+    "content": "Enterprise client requesting AI workflow audit",
+    "metadata": {
+      "budget_mentioned": true,
+      "company_size": "500+",
+      "timeline": "Q3 2025"
+    }
+  }'</span>
+
+<span class="comment"># Response</span>
+{
+  <span class="string">"vil_score"</span>: <span class="number">7.8</span>,
+  <span class="string">"route"</span>: <span class="string">"REVIEW"</span>,
+  <span class="string">"weighted_signal_score"</span>: <span class="number">8.2</span>,
+  <span class="string">"verifiability_score"</span>: <span class="number">7.8</span>,
+  <span class="string">"reason"</span>: <span class="string">"High value signal with moderate evidence"</span>
+}</pre>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Use Cases -->
+    <section id="use-cases">
+        <span class="section-label">Applications</span>
+        <h2 class="section-title">Where VIL Operates</h2>
+        <p class="section-desc">
+            VIL eliminates cognitive noise at the intake layer. One expensive queue at a time.
+        </p>
+
+        <div class="use-cases">
+            <div class="use-case">
+                <h3>Lead Qualification</h3>
+                <p>Score and route inbound leads before they consume operator attention. Separate high-intent signals from noise.</p>
+            </div>
+            <div class="use-case">
+                <h3>Construction RFI Triage</h3>
+                <p>Evaluate request-for-information items by urgency, verifiability, and risk before assigning to project managers.</p>
+            </div>
+            <div class="use-case">
+                <h3>Support Prioritization</h3>
+                <p>Rank tickets by evidence quality and operational impact. Route critical issues immediately, archive noise.</p>
+            </div>
+            <div class="use-case">
+                <h3>Research Intake</h3>
+                <p>Assess research signals for strategic alignment and evidence before committing resources to investigation.</p>
+            </div>
+            <div class="use-case">
+                <h3>Workflow Pre-Checking</h3>
+                <p>Validate that workflow triggers carry enough context and confidence before allowing downstream automation.</p>
+            </div>
+            <div class="use-case">
+                <h3>Content Opportunity Scoring</h3>
+                <p>Evaluate content ideas against strategic criteria and revenue potential before production investment.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Architecture -->
+    <section id="architecture">
+        <span class="section-label">Architecture</span>
+        <h2 class="section-title">Built for Precision</h2>
+        <p class="section-desc">
+            Lightweight, deterministic, auditable. No ML black boxes. No probabilistic guesswork.
+        </p>
+
+        <div class="arch-grid">
+            <div class="arch-item">
+                <h3>FastAPI Service</h3>
+                <p>Production-ready REST API with health checks, structured error handling, and JSON schema validation.</p>
+            </div>
+            <div class="arch-item">
+                <h3>Deterministic Engine</h3>
+                <p>Pure scoring logic. No model inference, no hallucination, no drift. Same input always produces same output.</p>
+            </div>
+            <div class="arch-item">
+                <h3>Configurable Weights</h3>
+                <p>YAML-driven criteria weights and threshold configuration. Tune per deployment without code changes.</p>
+            </div>
+            <div class="arch-item">
+                <h3>Audit Trail</h3>
+                <p>Every routing decision generates a complete audit record: scores, criteria breakdowns, risk flags, timestamps.</p>
+            </div>
+            <div class="arch-item">
+                <h3>Risk Overrides</h3>
+                <p>Critical flags override scoring entirely. Dangerous signals route to HALT regardless of value score.</p>
+            </div>
+            <div class="arch-item">
+                <h3>Docker Ready</h3>
+                <p>Single-command deployment. Container-native architecture for production, staging, and CI environments.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="divider"></div>
+
+    <!-- Relationship to CASA -->
+    <section>
+        <span class="section-label">Ecosystem</span>
+        <h2 class="section-title">VIL + CASA</h2>
+        <p class="section-desc">
+            VIL operates before execution. CASA governs execution. Two layers, complete coverage.
+        </p>
+
+        <div class="code-block">
+            <pre><span class="comment">// Signal lifecycle</span>
+
+<span class="keyword">VIL</span>  → Should this signal move forward?
+<span class="keyword">CASA</span> → Is the proposed action allowed to execute?
+
+<span class="comment">// VIL gates intake. CASA gates execution.</span>
+<span class="comment">// Together: nothing moves without evidence AND permission.</span></pre>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section">
+        <h2>Start Routing Signals</h2>
+        <p>Deploy VIL against your most expensive intake queue today.</p>
+        <a href="https://github.com/dburt-proex/VIL_deterministic_scoring_engine" class="hero-cta">
+            Get Started →
+        </a>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-inner">
+            <div class="footer-brand">VIL — Verified Intelligence Layer</div>
+            <ul class="footer-links">
+                <li><a href="https://github.com/dburt-proex/VIL_deterministic_scoring_engine">Repository</a></li>
+                <li><a href="https://github.com/dburt-proex/VIL_deterministic_scoring_engine/tree/main/docs">Documentation</a></li>
+                <li><a href="https://github.com/dburt-proex/VIL_deterministic_scoring_engine/tree/main/examples">Examples</a></li>
+            </ul>
+        </div>
+    </footer>
+
+</body>
+</html>
