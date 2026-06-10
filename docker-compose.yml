@@ -1,0 +1,13 @@
+services:
+  vil-dashboard:
+    build: .
+    container_name: vil-dashboard
+    ports:
+      - "8000:8000"
+    environment:
+      VIL_AUDIT_LOG: /app/data/audit_log.jsonl
+    volumes:
+      - vil_audit_data:/app/data
+
+volumes:
+  vil_audit_data:
