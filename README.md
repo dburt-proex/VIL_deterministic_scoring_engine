@@ -11,18 +11,18 @@ VIL evaluates inbound signals before they consume operator attention or trigger 
 ## Flow
 
 ```text
-Raw Signal -> Normalize -> Score Value -> Score Verifiability -> Apply Risk Overrides -> Route -> Audit
+Raw Signal -> Normalize -> Score Value -> Score Verifiability -> Apply Risk Overrides -> Route -> Audit -> Dashboard
 ```
 
 ## Routes
 
 | Route | Meaning |
 |---|---|
-| PASS | High-confidence signal. Ready for downstream action. |
+| PASS | High-confidence signal. Ready for downstream workflow. |
 | REVIEW | Valuable or plausible signal requiring human judgment. |
 | CLARIFY | Potentially useful, but missing evidence or specificity. |
 | ARCHIVE | Low-value noise. Store or discard. |
-| HALT | Unsafe, non-compliant, destructive, or outside scope. |
+| HALT | Critical risk or outside-scope signal requiring escalation. |
 
 ## Scoring Invariant
 
@@ -53,20 +53,54 @@ A signal cannot outrank its evidence.
 | 5.0 to 7.99 | REVIEW |
 | 3.0 to 4.99 | CLARIFY |
 | 0.0 to 2.99 | ARCHIVE |
-| Critical risk flag | HALT |
+| Critical flag | HALT |
 
-## API
+## Commercial Dashboard
+
+The app now includes a browser dashboard for commercial demos and client pilots.
+
+Dashboard capabilities:
+
+- Manual signal intake form
+- Instant VIL route decision
+- Weighted score versus verifiability cap visibility
+- Recommended next action
+- Persistent JSONL audit ledger
+- Recent decisions table
+- Metrics cards for total signals, average score, pass rate, review load, and HALT count
+
+Run locally:
 
 ```bash
 uvicorn app.main:app --reload
 ```
+
+Open:
+
+```text
+http://localhost:8000
+```
+
+## API
 
 ```bash
 curl http://localhost:8000/health
 ```
 
 ```bash
+curl http://localhost:8000/config
+```
+
+```bash
 curl -X POST http://localhost:8000/score -H "Content-Type: application/json" -d @examples/lead_intake_signal.json
+```
+
+```bash
+curl http://localhost:8000/metrics
+```
+
+```bash
+curl http://localhost:8000/audits
 ```
 
 ## Install
@@ -95,6 +129,12 @@ uvicorn app.main:app --reload
 docker compose up --build
 ```
 
+The dashboard will be available at:
+
+```text
+http://localhost:8000
+```
+
 ## Test
 
 ```bash
@@ -117,3 +157,7 @@ First sellable service:
 > AI Workflow Intake and Risk/Value Routing Audit
 
 Best use cases: lead qualification, construction RFI triage, support prioritization, research intake, workflow pre-checking, agency request routing, and content opportunity scoring.
+
+## Next Commercial Hardening
+
+For paid deployments, add authentication, tenant-level audit storage, configurable scoring policies, exportable reports, and database-backed persistence.
