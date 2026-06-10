@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>VIL Commercial Dashboard</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <main class="shell">
+    <section class="hero panel">
+      <div>
+        <p class="eyebrow">Verified Intelligence Layer</p>
+        <h1>Signal scoring, routing, and audit visibility for AI-assisted operations.</h1>
+        <p class="subhead">VIL evaluates inbound signals before they consume operator attention or trigger workflow action.</p>
+      </div>
+      <div class="hero-card">
+        <span class="label">Decision Rule</span>
+        <strong>VIL score = min(weighted signal score, verifiability score)</strong>
+        <p>A signal cannot outrank its evidence.</p>
+      </div>
+    </section>
+
+    <section class="metrics-grid" id="metricsGrid">
+      <article class="metric panel"><span>Total Signals</span><strong id="totalSignals">0</strong></article>
+      <article class="metric panel"><span>Average VIL Score</span><strong id="averageScore">0.0</strong></article>
+      <article class="metric panel"><span>Pass Rate</span><strong id="passRate">0%</strong></article>
+      <article class="metric panel"><span>Review Load</span><strong id="reviewLoad">0</strong></article>
+      <article class="metric panel"><span>HALT Count</span><strong id="haltCount">0</strong></article>
+    </section>
+
+    <section class="workspace">
+      <form class="panel form" id="scoreForm">
+        <div class="section-title">
+          <p class="eyebrow">Score New Signal</p>
+          <h2>Commercial Intake Demo</h2>
+        </div>
+
+        <label>Source
+          <input id="source" value="website_form" required />
+        </label>
+
+        <label>Signal Type
+          <select id="signalType">
+            <option value="lead">lead</option>
+            <option value="rfi">rfi</option>
+            <option value="content">content</option>
+            <option value="support">support</option>
+            <option value="research">research</option>
+            <option value="workflow_request">workflow_request</option>
+            <option value="other">other</option>
+          </select>
+        </label>
+
+        <label>Signal Content
+          <textarea id="content" rows="7" required>A local construction contractor wants help reducing manual admin time, improving estimate follow-up, and routing new leads faster before weekend office work piles up.</textarea>
+        </label>
+
+        <div class="two-col">
+          <label>Industry
+            <input id="industry" value="construction" />
+          </label>
+          <label>Workflow
+            <input id="workflow" value="lead intake and follow-up" />
+          </label>
+        </div>
+
+        <label>Risk Flags, comma separated
+          <input id="riskFlags" placeholder="regulated_decision, private_data_exposure" />
+        </label>
+
+        <button type="submit">Score Signal</button>
+      </form>
+
+      <section class="panel result-panel">
+        <div class="section-title">
+          <p class="eyebrow">Latest Score Object</p>
+          <h2>Routing Decision</h2>
+        </div>
+        <div id="latestResult" class="empty">Score a signal to generate a VIL decision.</div>
+      </section>
+    </section>
+
+    <section class="panel">
+      <div class="section-title row">
+        <div>
+          <p class="eyebrow">Audit Ledger</p>
+          <h2>Recent Decisions</h2>
+        </div>
+        <button class="secondary" id="refreshBtn" type="button">Refresh</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Route</th>
+              <th>Score</th>
+              <th>Type</th>
+              <th>Source</th>
+              <th>Reason</th>
+            </tr>
+          </thead>
+          <tbody id="auditRows"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
