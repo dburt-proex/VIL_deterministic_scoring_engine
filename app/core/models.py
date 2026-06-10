@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from enum import Enum
 from typing import Any, Dict, List, Literal, Optional
 from uuid import uuid4
@@ -68,6 +69,7 @@ class CriteriaScores(BaseModel):
 
 class AuditRecord(BaseModel):
     audit_id: str = Field(default_factory=lambda: f"audit_{uuid4().hex[:12]}")
+    created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
     signal_id: str
     input_hash: str
     criteria_scores: Dict[str, float]
@@ -84,17 +86,31 @@ class AuditRecord(BaseModel):
 
 class VILScoreObject(BaseModel):
     signal_id: str
+    source: str
+    signal_type: SignalType
+    content_preview: str
     weighted_signal_score: float
     verifiability_score: float
     vil_score: float
     route: Route
     reason: str
+    recommended_action: str
     criteria_scores: Dict[str, float]
     risk_flags: List[str] = Field(default_factory=list)
     audit: AuditRecord
 
 
+class DashboardMetrics(BaseModel):
+    total_signals: int = 0
+    route_counts: Dict[str, int] = Field(default_factory=dict)
+    average_vil_score: float = 0.0
+    pass_rate: float = 0.0
+    review_load: int = 0
+    halt_count: int = 0
+    latest_audit_at: Optional[str] = None
+
+
 class HealthResponse(BaseModel):
     status: str = "ok"
     service: str = "Verified Intelligence Layer"
-    version: str = "1.0.0"
+    version: str = "1.1.0"
