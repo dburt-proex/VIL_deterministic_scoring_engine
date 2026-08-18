@@ -1,0 +1,8 @@
+{
+  "registry": "dburt-proex/operator-intelligence:ecosystem/registry.json",
+  "registry_version": "1.0.0",
+  "repository": "dburt-proex/VIL_deterministic_scoring_engine",
+  "classification": "CORE",
+  "authority_for": ["signal_scoring_and_intake_routing"],
+  "may_define_new_primitives": true
+}
