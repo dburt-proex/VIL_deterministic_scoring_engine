@@ -1,5 +1,7 @@
 # Verified Intelligence Layer
 
+**Portfolio evidence:** [Systems & proof](https://drew-burt-portfolio.daxxer-os.chatgpt.site/systems)
+
 Deterministic signal scoring, verification, routing, and audit records for AI-assisted operations.
 
 VIL evaluates inbound signals before they consume operator attention or trigger downstream automation. It turns messy leads, RFIs, research items, support issues, content opportunities, and workflow requests into structured score objects with clear routing decisions.
